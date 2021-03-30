@@ -2,24 +2,24 @@ package ru.netology.web;
 
 import org.junit.jupiter.api.Test;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 
 class DeliveryOrderTest {
-    SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-    Calendar cal = Calendar.getInstance();
+    LocalDate today = LocalDate.now();
+    LocalDate newDate = today.plusDays(3);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     @Test
     void shouldFormFilledOutCorrectly() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Нальчик");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $("[data-test-id='agreement']").click();
@@ -29,10 +29,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldIncorrectFillingCity() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Майский");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $("[data-test-id='agreement']").click();
@@ -42,9 +41,10 @@ class DeliveryOrderTest {
 
     @Test
     void shouldIncorrectFillingDate() {
+        newDate = today.plusDays(2);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Москва");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $("[data-test-id='agreement']").click();
@@ -54,10 +54,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldIncorrectFillingName() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Москва");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Alex Smith");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $("[data-test-id='agreement']").click();
@@ -67,10 +66,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldIncorrectFillingPhone() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Москва");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue("1234567890");
         $("[data-test-id='agreement']").click();
@@ -80,10 +78,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldCheckboxIsNotSelected() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Москва");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $$(".button").find(exactText("Забронировать")).click();
@@ -92,10 +89,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldFieldCityIsEmpty() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $("[data-test-id='agreement']").click();
@@ -117,10 +113,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldFieldNameIsEmpty() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Москва");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("");
         $("[data-test-id='phone'] input").setValue("+12345678901");
         $("[data-test-id='agreement']").click();
@@ -130,10 +125,9 @@ class DeliveryOrderTest {
 
     @Test
     void shouldPhoneFieldIsEmpty() {
-        cal.add(Calendar.DATE, 3);
         open("http://localhost:9999");
         $("[data-test-id='city'] input").setValue("Москва");
-        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(format.format(cal.getTime()));
+        $("[data-test-id='date'] .input__control").doubleClick().sendKeys(formatter.format(newDate));
         $("[data-test-id='name'] input").setValue("Николай Римский-Корсаков");
         $("[data-test-id='phone'] input").setValue(" ");
         $("[data-test-id='agreement']").click();
